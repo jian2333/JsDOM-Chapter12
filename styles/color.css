@@ -84,3 +84,8 @@ tr.highlight td {
     color: #223;
     background-color: #cba;
 }
+
+/*contact.html*/
+input.placeholder {
+    color:grey;
+}

@@ -115,3 +115,11 @@ dt {
 dd {
     float: left;
 }
+
+/*contact.html*/
+label {
+    display: block;
+}
+fieldset {
+    border: 0;
+}
