@@ -184,7 +184,60 @@ function prepareInternalnav() {
 }
 addLoadEvent(prepareInternalnav);
 
-
+// photos.html
+// pic的 onclick事件
+function showPic(whichpic) {
+    if (!document.getElementById("placeholder")) return true;
+    var source = whichpic.getAttribute("href");
+    var placeholder = document.getElementById("placeholder");
+    placeholder.setAttribute("src",source);
+    if (!document.getElementById("description")) return false;
+    var text;
+    if (whichpic.getAttribute("title")) {
+        text = whichpic.getAttribute("title");
+    } else {
+        text = "";
+    }
+    var description = document.getElementById("description");
+    if (description.lastChild.nodeType == 3) {
+        description.lastChild.nodeValue = text;
+    }
+    return false;
+}
+// 动态添加 description 和 img 标签
+function preparePlaceholder() {
+    if (!document.createElement) return false;
+    if (!document.createTextNode) return false;
+    if (!document.getElementById) return false;
+    if (!document.getElementById("imagegallery")) return false;
+    var placeholder = document.createElement("img");
+    placeholder.setAttribute("src","images/placeholder.gif");
+    placeholder.setAttribute("alt","my image gallery");
+    placeholder.setAttribute("id","placeholder");
+    var description = document.createElement("p");
+    description.setAttribute("id","description");
+    var desctext = document.createTextNode("Choose an image");
+    description.appendChild(desctext);
+    var gallery = document.getElementById("imagegallery");
+    insertAfter(description,gallery);
+    insertAfter(placeholder,description);
+}
+//添加 pic的 onclick事件
+function prepareGallery() {
+    if (!document.getElementById) return false;
+    if (!document.getElementsByTagName) return false;
+    if (!document.getElementById("imagegallery")) return false;
+    var gallery = document.getElementById("imagegallery");
+    var links = gallery.getElementsByTagName("a");
+    if (links.length == 0) return false;
+    for(var i=0;i<links.length;i++) {
+        links[i].onclick = function () {
+            return showPic(this);
+        }
+    }
+}
+addLoadEvent(preparePlaceholder);
+addLoadEvent(prepareGallery);
 
 
 

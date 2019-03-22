@@ -95,3 +95,8 @@ article img {
     left: 0;
     z-index: 99;
 }
+
+/*photos.html*/
+#imagegallery li {
+    display: inline;
+}
