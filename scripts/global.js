@@ -2,6 +2,7 @@
  * Created by Administrator on 2019/3/22.
  */
 
+//  common functions
 function addLoadEvent(func) {
     var oldonload = window.onload;
     if (typeof window.onload != "function"){
@@ -34,6 +35,7 @@ function addClass(element,value) {
     }
 }
 
+//  index.html
 //  highlight link which class equal here
 function highlightPage() {
     if (!document.getElementsByTagName) return false;
@@ -145,7 +147,42 @@ function prepareSlideshow() {
 }
 addLoadEvent(prepareSlideshow);
 
+//  about.html
+function showSection(id) {
+    var sections = document.getElementsByTagName("section");
+    for (var i=0;i<sections.length;i++) {
+        if (sections[i].getAttribute("id") != id) {
+            sections[i].style.display = "none";
+        } else {
+            sections[i].style.display = "block";
+        }
+    }
+}
 
+function prepareInternalnav() {
+    if (!document.getElementsByTagName) return false;
+    if (!document.getElementById) return false;
+    var articles = document.getElementsByTagName("article");
+    if (articles.length == 0) return false;
+    var navs = articles[0].getElementsByTagName("nav");
+    if (navs.length == 0) return false;
+    var nav = navs[0];
+    var links = nav.getElementsByTagName("a");
+    if (links.length == 0) return false;
+    // debugger;
+    for (var i=0;i<links.length;i++) {
+        var sectionId = links[i].getAttribute("href").split("#")[1];
+        var section = document.getElementById(sectionId);
+        if (!section) continue;
+        section.style.display = "none";
+        links[i].destination = sectionId;
+        links[i].onclick = function () {
+            showSection(this.destination);
+            return false;
+        }
+    }
+}
+addLoadEvent(prepareInternalnav);
 
 
 
