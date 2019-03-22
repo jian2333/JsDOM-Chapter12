@@ -36,7 +36,7 @@ function addClass(element,value) {
 }
 
 //  index.html
-//  highlight link which class equal here
+//  高亮nav中当前页的a标签
 function highlightPage() {
     if (!document.getElementsByTagName) return false;
     var headers = document.getElementsByTagName("header");
@@ -98,7 +98,6 @@ function moveElement(elementID,final_x,final_y,interval) {
     var repeat = "moveElement('" + elementID + "'," + final_x + "," + final_y + "," + interval + ")";
     elem.movement = setTimeout(repeat,interval);
 }
-
 function prepareSlideshow() {
     if (!document.getElementsByTagName) return false;
     if (!document.getElementById) return false;
@@ -158,7 +157,6 @@ function showSection(id) {
         }
     }
 }
-
 function prepareInternalnav() {
     if (!document.getElementsByTagName) return false;
     if (!document.getElementById) return false;
@@ -184,8 +182,8 @@ function prepareInternalnav() {
 }
 addLoadEvent(prepareInternalnav);
 
-// photos.html
-// pic的 onclick事件
+//  photos.html
+//  pic的 onclick事件
 function showPic(whichpic) {
     if (!document.getElementById("placeholder")) return true;
     var source = whichpic.getAttribute("href");
@@ -204,7 +202,7 @@ function showPic(whichpic) {
     }
     return false;
 }
-// 动态添加 description 和 img 标签
+//  动态添加 description 和 img 标签
 function preparePlaceholder() {
     if (!document.createElement) return false;
     if (!document.createTextNode) return false;
@@ -222,7 +220,7 @@ function preparePlaceholder() {
     insertAfter(description,gallery);
     insertAfter(placeholder,description);
 }
-//添加 pic的 onclick事件
+//  添加 pic的 onclick事件
 function prepareGallery() {
     if (!document.getElementById) return false;
     if (!document.getElementsByTagName) return false;
@@ -239,6 +237,80 @@ function prepareGallery() {
 addLoadEvent(preparePlaceholder);
 addLoadEvent(prepareGallery);
 
+//  live.html
+//  奇数行添加样式
+function stripeTables() {
+    if (!document.getElementsByTagName) return false;
+    var tables = document.getElementsByTagName("table");
+    for (var i=0;i<tables.length;i++) {
+        var odd = false;
+        var rows = tables[i].getElementsByTagName("tr");
+        for (var j=0;j<rows.length;j++) {
+            if (odd == true) {
+                addClass(rows[j],"odd");
+                odd = false;
+            } else {
+                odd = true;
+            }
+        }
+    }
+}
+//  鼠标所在行高亮
+function highlightRows() {
+    if (!document.getElementsByTagName) return false;
+    if (!document.getElementsByTagName("tr")) return false;
+    var rows = document.getElementsByTagName("tr");
+    for (var i=0;i<rows.length;i++) {
+        rows[i].oldClassName = rows[i].className;
+        rows[i].onmouseover = function () {
+            addClass(this,"highlight");
+        }
+        rows[i].onmouseout = function () {
+            this.className = this.oldClassName;
+        }
+    }
+}
+//  缩略词 添加到页面底部
+function displayAbbreviations() {
+    if (!document.getElementsByTagName || !document.createElement || !document.createTextNode) return false;
+    //获取缩略词in Array
+    var abbrs = document.getElementsByTagName("abbr");
+    if (abbrs.length < 1) return false;
+    var defs = new Array();
+    for (var i=0;i<abbrs.length;i++) {
+        var current_abbr = abbrs[i];
+        if (current_abbr.childNodes.length < 1) continue;
+        var key = current_abbr.lastChild.nodeValue;
+        var description = current_abbr.getAttribute("title");
+        defs[key] = description;
+    }
+    //创建title和desc节点
+    var dlist = document.createElement("dl");
+    for (key in defs) {
+        var definition = defs[key];
+        var dtitle = document.createElement("dt");
+        var dtitle_text = document.createTextNode(key);
+        dtitle.appendChild(dtitle_text);
+        var ddesc = document.createElement("dd");
+        var ddesc_text = document.createTextNode(definition);
+        ddesc.appendChild(ddesc_text);
+        dlist.appendChild(dtitle);
+        dlist.appendChild(ddesc);
+    }
+    //创建h3和缩略词节点
+    if (dlist.length < 1) return false;
+    var header = document.createElement("h3");
+    var header_text = document.createTextNode("Abbreviations");
+    header.appendChild(header_text);
+    var articles = document.getElementsByTagName("article");
+    if (articles.length == 0) return false;
+    var container = articles[0];
+    container.appendChild(header);
+    container.appendChild(dlist);
+}
+addLoadEvent(stripeTables);
+addLoadEvent(highlightRows);
+addLoadEvent(displayAbbreviations);
 
 
 
